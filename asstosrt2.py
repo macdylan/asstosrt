@@ -60,10 +60,10 @@ class Ass2Srt():
         translate: zh-hans or zh-hant
         '''
 
-        if assurl == None:
+        if assurl is not None:
             assurl = self.assurl
-        if srturl == None:
-            if self.srturl == None:
+        if srturl is not None:
+            if self.srturl is None:
                 srturl = assurl[:-4] + '.srt'
             else:
                 srturl = self.srturl
@@ -80,7 +80,7 @@ class Ass2Srt():
         asstxt = assbyte.decode(inencoding, 'ignore')
 
         #繁简体转换：
-        if canlangconv and translate != None:
+        if canlangconv and translate is not None:
             langcer = langconv.Converter(translate)
 
         asslines = asstxt.splitlines()
@@ -134,7 +134,7 @@ class Ass2Srt():
                         ltext = ltext.replace(r'\N', ' ')
 
                 #处理繁简转换：
-                if translate != None and canlangconv:
+                if translate is not None and canlangconv:
                     ltext = langcer.convert(ltext)
 
                 #加入到列表：
@@ -165,8 +165,8 @@ class Ass2Srt():
                 #print (nostart, noend, notext, noeffect)
 
         #检查结果：
-        if len(sublst) == 0 :
-            if chkcode == False:
+        if not len(sublst) :
+            if not chkcode:
                 print('Please install "chardet" (http://chardet.feedparser.org/download/) to solve the file coding porblem.')
             else:
                 print('** Error: Subtitle is not found in the file.\nPlease the file is ass-file.')
@@ -177,12 +177,12 @@ class Ass2Srt():
             for end in range(len(sublst) - 1, 0, -1):
                 sorted = False
                 for i in range(0, end):
-                    if(self.__isfornt(sublst[i][0], sublst[i + 1][0]) == False): #按 Begin 排序 
+                    if not self.__isfornt(sublst[i][0], sublst[i + 1][0]): #按 Begin 排序
                         temp = sublst[i] #顺序不对，替换之
                         sublst[i] = sublst[i + 1]
                         sublst[i + 1] = temp
                         sorted = True
-                if sorted == False:
+                if not sorted:
                     break #一次循环无对调，说明已经正确排序
 
         #调整为SRT格式并写出：
@@ -223,14 +223,14 @@ if __name__ == '__main__':
     #检测拖拽入的文件：
     filelst = sys.argv
     del filelst[0]
-    if len(filelst) == 0:
+    if not len(filelst):
         print('Auto scanning ass-files...')
         #扫描运行目录下的文件：
         allfile = os.listdir(os.getcwd())
         for file in allfile:
             if file.endswith('.ass') or file.endswith('.ssa'):
                 filelst.append(file)
-    if len(filelst) == 0:
+    if not len(filelst)0:
         print('No found any ass-file.')
         raw_input()
         sys.exit()
@@ -253,7 +253,7 @@ if __name__ == '__main__':
             fail += 1
             continue
 
-    if fail == 0:
+    if not fail:
         print('Success! All done.')
     else:
         print('%s done, %s failed.' % (str(i-fail), str(fail)))
